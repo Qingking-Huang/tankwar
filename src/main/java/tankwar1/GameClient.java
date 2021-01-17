@@ -4,21 +4,36 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class GameClient extends JComponent {
 
-    private tank playertnak;
+    private tank playerTank;
 
+    private List<tank> enemyTanks;
+
+    private List<wall> walls;
 
     private GameClient(){
-        this.playertnak = new tank(400 , 100 ,Direction.DOWN );
+        this.playerTank = new tank(400 , 100 ,Direction.DOWN );
+        this.enemyTanks = new ArrayList<>(12);
+        for(int i = 0 ; i < 3 ; i++){
+            for(int j = 0 ; j < 4 ; j++){
+                this.enemyTanks.add(new tank(200 + 120 *j, 400 +40 *i ,true, Direction.UP));
+            }
+        }
 
         this.setPreferredSize(new Dimension(800 , 600));//設定一個視窗800X600
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        playertnak.draw(g);
+        playerTank.draw(g);
+        for (tank tanks : enemyTanks){
+            tanks.draw(g);
+        }
     }
 
     public static void main(String[] args) {
@@ -32,12 +47,12 @@ public class GameClient extends JComponent {
         frame.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                client.playertnak.keyPressed(e);
+                client.playerTank.keyPressed(e);
                 }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                client.playertnak.keyReleased(e);
+                client.playerTank.keyReleased(e);
             }
 
         });
